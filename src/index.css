@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── Color palette defaults (DriveON) ── */
+  --color-pearl-50: #FBF6E9;
+  --color-pearl-100: #F4E4C5;
+  --color-pearl-200: #EBD4A4;
+  --color-pearl-300: #E0C283;
+  --color-pearl-400: #D4B063;
+
+  --color-teal-50: #EAF5F2;
+  --color-teal-100: #D3EBE6;
+  --color-teal-200: #A8D6CD;
+  --color-teal-300: #9CC8BD;
+  --color-teal-400: #82B8AB;
+  --color-teal-500: #6FAC9F;
+  --color-teal-600: #5A9688;
+  --color-teal-700: #487D70;
+  --color-teal-800: #376358;
+
+  --color-orange-50: #FCEBE0;
+  --color-orange-100: #F9D2BA;
+  --color-orange-200: #F0A878;
+  --color-orange-300: #E0854A;
+  --color-orange-400: #D96821;
+  --color-orange-500: #BF4B00;
+  --color-orange-600: #A03F00;
+  --color-orange-700: #823300;
+  --color-orange-800: #5F2700;
+
+  --color-ink-900: #1A1A17;
+  --color-ink-800: #2D2D27;
+  --color-ink-700: #42423B;
+  --color-ink-600: #5C5C52;
+  --color-ink-500: #7A7A6E;
+  --color-ink-400: #9C9C8E;
+  --color-ink-300: #C5C5B5;
+  --color-ink-200: #E0E0D4;
+
+  /* ── Semantic tokens ── */
+  --color-primary: #6FAC9F;
+  --color-secondary: #BF4B00;
+  --color-accent: #F4E4C5;
+  --color-background: #F4E4C5;
+  --color-text: #1A1A17;
+  --color-heading: #1A1A17;
+  --color-button-primary: #BF4B00;
+  --color-button-secondary: #6FAC9F;
+  --color-button-text: #FBF6E9;
+  --color-card: #FBF6E9;
+  --color-footer: #1A1A17;
+  --color-link: #BF4B00;
+
+  /* ── Typography ── */
+  --font-heading: 'Unbounded';
+  --font-body: 'Inter';
+
+  /* ── Radius ── */
+  --radius-button: 0.75rem;
+  --radius-card: 1.25rem;
+  --radius-card-lg: 1.75rem;
+  --radius-input: 0.75rem;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 1px 2px rgba(26,26,23,0.04), 0 8px 24px -12px rgba(26,26,23,0.12);
+  --shadow-card-hover: 0 2px 4px rgba(26,26,23,0.06), 0 16px 36px -14px rgba(26,26,23,0.2);
+  --shadow-none: none;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-pearl-100 text-ink-900 font-body antialiased;
+    background-color: var(--color-background, #F4E4C5);
+    color: var(--color-text, #1A1A17);
+    font-family: var(--font-body, 'Inter'), system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    line-height: var(--theme-line-height, 1.5);
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-family: var(--font-heading, 'Unbounded'), system-ui, sans-serif;
+    color: var(--color-heading, #1A1A17);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    @apply bg-orange-500 text-pearl-100;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-secondary, #BF4B00);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .h1 {
+    @apply font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl;
+  }
+  .h2 {
+    @apply font-display font-bold text-2xl sm:text-3xl md:text-4xl;
+  }
+  .h3 {
+    @apply font-display font-semibold text-xl sm:text-2xl;
+  }
+  .body-text {
+    @apply text-base sm:text-lg leading-relaxed text-ink-700;
+  }
+  .small-text {
+    @apply text-sm text-ink-500;
+  }
+  .label {
+    @apply text-xs font-semibold uppercase tracking-wider text-ink-500;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
