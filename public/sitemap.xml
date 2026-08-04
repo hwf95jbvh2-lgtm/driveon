@@ -1,73 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- TODO: replace PRODUCTION_DOMAIN with actual domain after deployment -->
   <url>
-    <loc>PRODUCTION_DOMAIN/</loc>
+    <loc>https://driveon.ru/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/exams</loc>
+    <loc>https://driveon.ru/exams</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/after-exam</loc>
+    <loc>https://driveon.ru/after-exam</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful</loc>
+    <loc>https://driveon.ru/useful</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/exam-process</loc>
+    <loc>https://driveon.ru/useful/exam-process</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/what-to-bring</loc>
+    <loc>https://driveon.ru/useful/what-to-bring</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/before-exam</loc>
+    <loc>https://driveon.ru/useful/before-exam</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/common-mistakes</loc>
+    <loc>https://driveon.ru/useful/common-mistakes</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/failed-exam</loc>
+    <loc>https://driveon.ru/useful/failed-exam</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/faq</loc>
+    <loc>https://driveon.ru/useful/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/how-to-choose-school</loc>
+    <loc>https://driveon.ru/useful/how-to-choose-school</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/useful/how-to-choose-instructor</loc>
+    <loc>https://driveon.ru/useful/how-to-choose-instructor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/telegram</loc>
+    <loc>https://driveon.ru/telegram</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>PRODUCTION_DOMAIN/about</loc>
+    <loc>https://driveon.ru/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

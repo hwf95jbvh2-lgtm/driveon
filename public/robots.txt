@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO: update sitemap URL after production domain is connected
-# Sitemap: https://PRODUCTION_DOMAIN/sitemap.xml
+Sitemap: https://driveon.ru/sitemap.xml

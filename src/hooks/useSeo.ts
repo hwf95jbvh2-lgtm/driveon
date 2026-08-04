@@ -3,11 +3,13 @@ import { useEffect } from 'react';
 interface SeoProps {
   title: string;
   description?: string;
+  canonicalPath?: string;
 }
 
+const SITE_ORIGIN = 'https://driveon.ru';
 const defaultTitle = 'График экзаменов ГИБДД Владивосток 2026 | DriveON';
 
-export function useSeo({ title, description }: SeoProps) {
+export function useSeo({ title, description, canonicalPath }: SeoProps) {
   useEffect(() => {
     document.title = title;
 
@@ -37,8 +39,21 @@ export function useSeo({ title, description }: SeoProps) {
     }
     setOg('og:title', title);
 
+    const canonicalUrl = canonicalPath
+      ? `${SITE_ORIGIN}${canonicalPath}`
+      : SITE_ORIGIN;
+    setOg('og:url', canonicalUrl);
+
+    let canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (!canonicalEl) {
+      canonicalEl = document.createElement('link');
+      canonicalEl.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalEl);
+    }
+    canonicalEl.setAttribute('href', canonicalUrl);
+
     return () => {
       document.title = defaultTitle;
     };
-  }, [title, description]);
+  }, [title, description, canonicalPath]);
 }
