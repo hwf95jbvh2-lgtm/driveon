@@ -25,7 +25,7 @@ export function CustomPageView() {
           setPage(data);
         }
       } catch {
-        // ignore error
+        // ignore
       } finally {
         if (mounted) {
           setLoading(false);
@@ -65,6 +65,7 @@ export function CustomPageView() {
     <Layout>
       <article className="border-b border-ink-200/60">
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+
           <Link
             to="/"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-600 hover:text-ink-900"
@@ -87,7 +88,10 @@ export function CustomPageView() {
               <div className="mt-10 flex flex-col gap-10">
                 {(page.content as UsefulSection[]).map((section, i) => (
                   <section key={i} className="flex flex-col gap-5">
-                    <h2 className="h3">{section.heading}</h2>
+
+                    <h2 className="h3">
+                      {section.heading}
+                    </h2>
 
                     {section.cards && (
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -127,11 +131,13 @@ export function CustomPageView() {
                         ))}
                       </ul>
                     )}
+
                   </section>
                 ))}
               </div>
             </>
           )}
+
         </div>
       </article>
     </Layout>
