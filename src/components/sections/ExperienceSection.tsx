@@ -11,8 +11,15 @@ import { useContentValue } from '@/context/ContentContext';
 export function ExperienceSection() {
   const label = useContentValue('experience.label', 'После экзамена');
   const title = useContentValue('experience.title', 'Как прошёл экзамен?');
-  const subtitle = useContentValue('experience.subtitle', 'Опыт тех, кто уже сдавал, помогает подготовиться следующим.');
-  const buttonLabel = useContentValue('experience.button', 'Рассказать о своём экзамене');
+  const subtitle = useContentValue(
+    'experience.subtitle',
+    'Опыт тех, кто уже сдавал, помогает подготовиться следующим.'
+  );
+  const buttonLabel = useContentValue(
+    'experience.button',
+    'Рассказать о своём экзамене'
+  );
+
   const [open, setOpen] = useState(false);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,45 +46,58 @@ export function ExperienceSection() {
   const featured = experiences.slice(0, 3);
 
   return (
-    <section className="border-b border-ink-200/60">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeader
-            label={label}
-            title={title}
-            subtitle={subtitle}
-          />
+    <section className="py-10 sm:py-12">
+      <div className="container mx-auto">
+
+        <SectionHeader
+          label={label}
+          title={title}
+          subtitle={subtitle}
+        />
+
+        <div className="mt-4">
           <Button
             variant="primary"
             size="md"
             className="shrink-0"
             onClick={() => setOpen(true)}
           >
-            <PenLine className="h-4 w-4" />
+            <PenLine className="mr-2 h-4 w-4" />
             {buttonLabel}
           </Button>
         </div>
 
         {loading ? (
-          <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-48 animate-pulse rounded-2xl bg-pearl-200/60" />
+              <div
+                key={i}
+                className="h-40 animate-pulse rounded-2xl bg-pearl-200/60"
+              />
             ))}
           </div>
         ) : featured.length > 0 ? (
-          <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {featured.map((exp) => (
-              <ExperienceCard key={exp.id} experience={exp} />
+              <ExperienceCard
+                key={exp.id}
+                experience={exp}
+              />
             ))}
           </div>
         ) : (
-          <p className="mt-10 text-ink-500">
+          <p className="mt-5 text-ink-500">
             Опубликованные истории пока не добавлены.
           </p>
         )}
+
       </div>
 
-      <ExperienceFormModal open={open} onClose={() => setOpen(false)} onSubmit={handleSubmit} />
+      <ExperienceFormModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleSubmit}
+      />
     </section>
   );
 }
