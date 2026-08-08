@@ -1,9 +1,10 @@
 // ── Public-facing types (used by the public site) ────────────
+
 export type ExamStatus = 'upcoming' | 'completed' | 'hidden';
 
 export interface Exam {
   id: string;
-  date: string; // ISO date
+  date: string;
   city: string;
   examType: string;
   officialUrl: string;
@@ -16,12 +17,12 @@ export type ModerationStatus = 'pending' | 'published' | 'rejected';
 export interface Experience {
   id: string;
   city: string;
-  examDate: string; // ISO date
+  examDate: string;
   category: string;
   result: ExperienceResult;
   experience: string;
   comment?: string;
-  createdAt: string; // ISO date
+  createdAt: string;
 }
 
 export interface CityStreetList {
@@ -35,7 +36,7 @@ export interface UsefulArticle {
   slug: string;
   title: string;
   description: string;
-  icon: string; // lucide icon name
+  icon: string;
 }
 
 export type NewExperience = Omit<Experience, 'id' | 'createdAt'>;
@@ -57,7 +58,9 @@ export interface UsefulArticleContent {
   sections: UsefulSection[];
 }
 
-// ── Database row types (snake_case, matches schema) ──────────
+
+// ── Database row types ───────────────────────────────────────
+
 export interface ExamRow {
   id: string;
   date: string;
@@ -111,7 +114,9 @@ export interface SettingsRow {
   updated_at: string;
 }
 
-// ── Admin form payloads ─────────────────────────────────────
+
+// ── Admin form payloads ──────────────────────────────────────
+
 export interface ExamInput {
   date: string;
   city: string;
@@ -151,7 +156,9 @@ export interface SettingsInput {
   contact_email: string;
 }
 
-// ── Exam schedule links (month PDF buttons) ─────────────────
+
+// ── Exam schedule links ──────────────────────────────────────
+
 export interface ExamScheduleLinkRow {
   id: string;
   label: string;
@@ -175,39 +182,55 @@ export interface ExamScheduleLinkInput {
   sort_order: number;
 }
 
-// ── CMS types ────────────────────────────────────────────────
+
+// ── CMS theme ────────────────────────────────────────────────
+
 export interface ThemeRow {
   id: number;
+
   primary_color: string;
   secondary_color: string;
   accent_color: string;
+
   background_color: string;
   text_color: string;
   heading_color: string;
+
   button_primary_color: string;
   button_secondary_color: string;
   button_text_color: string;
+
   card_color: string;
   footer_color: string;
   link_color: string;
+
   heading_font: string;
   body_font: string;
+
   heading_size: string;
   section_heading_size: string;
   body_size: string;
+
   font_weight: string;
   line_height: string;
+
   content_width: number;
   text_align: string;
+
   button_radius: number;
   card_radius: number;
   input_radius: number;
+
   button_size: string;
+
   border_width: number;
   border_enabled: boolean;
+
   shadow_intensity: string;
+
   padding: number;
   gap: number;
+
   updated_at: string;
 }
 
@@ -215,34 +238,49 @@ export interface ThemeInput {
   primary_color: string;
   secondary_color: string;
   accent_color: string;
+
   background_color: string;
   text_color: string;
   heading_color: string;
+
   button_primary_color: string;
   button_secondary_color: string;
   button_text_color: string;
+
   card_color: string;
   footer_color: string;
   link_color: string;
+
   heading_font: string;
   body_font: string;
+
   heading_size: string;
   section_heading_size: string;
   body_size: string;
+
   font_weight: string;
   line_height: string;
+
   content_width: number;
   text_align: string;
+
   button_radius: number;
   card_radius: number;
   input_radius: number;
+
   button_size: string;
+
   border_width: number;
   border_enabled: boolean;
+
   shadow_intensity: string;
+
   padding: number;
   gap: number;
 }
+
+
+// ── Content ──────────────────────────────────────────────────
 
 export interface ContentRow {
   id: string;
@@ -251,16 +289,72 @@ export interface ContentRow {
   updated_at: string;
 }
 
+
+// ── Visual editor ────────────────────────────────────────────
+
+export interface SectionLayout {
+  width?: string;
+  maxWidth?: string;
+
+  minHeight?: string;
+  height?: string;
+
+  paddingTop?: number;
+  paddingRight?: number;
+  paddingBottom?: number;
+  paddingLeft?: number;
+
+  marginTop?: number;
+  marginBottom?: number;
+
+  gap?: number;
+
+  borderRadius?: number;
+
+  background?: string;
+  textAlign?: 'left' | 'center' | 'right';
+
+  hiddenOnDesktop?: boolean;
+  hiddenOnMobile?: boolean;
+}
+
+export interface SectionResponsiveLayout {
+  desktop?: SectionLayout;
+  mobile?: SectionLayout;
+}
+
+export interface SectionContentConfig {
+  layout?: SectionResponsiveLayout;
+
+  backgroundImage?: string;
+
+  customClassName?: string;
+
+  [key: string]: unknown;
+}
+
+
+// ── Page sections ────────────────────────────────────────────
+
 export interface PageSectionRow {
   id: string;
+
   section_key: string;
+
   title: string;
   subtitle: string | null;
+
   sort_order: number;
+
   visible: boolean;
-  content_json: unknown;
+
+  content_json: SectionContentConfig | unknown;
+
   updated_at: string;
 }
+
+
+// ── Navigation ──────────────────────────────────────────────
 
 export interface NavItemRow {
   id: string;
@@ -281,6 +375,9 @@ export interface NavItemInput {
   sort_order: number;
   visible: boolean;
 }
+
+
+// ── Custom pages ─────────────────────────────────────────────
 
 export interface CustomPageRow {
   id: string;
@@ -303,6 +400,9 @@ export interface CustomPageInput {
   content: UsefulSection[];
 }
 
+
+// ── Media ────────────────────────────────────────────────────
+
 export interface MediaItemRow {
   id: string;
   name: string;
@@ -311,6 +411,9 @@ export interface MediaItemRow {
   file_size: number;
   created_at: string;
 }
+
+
+// ── Form fields ──────────────────────────────────────────────
 
 export interface FormFieldRow {
   id: string;
