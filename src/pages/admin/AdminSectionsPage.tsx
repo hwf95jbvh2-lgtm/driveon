@@ -8,17 +8,15 @@ import {
   Trash2,
   Copy,
 } from 'lucide-react';
-
 import {
   fetchPageSections,
   updatePageSection,
   deletePageSection,
   createPageSection,
 } from '@/lib/data';
-
 import type { PageSectionRow } from '@/types';
-
 import { AdminPageHeader } from '@/components/admin/AdminLayout';
+import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/admin/Dialogs';
 import { useToast } from '@/components/admin/Toast';
 
@@ -53,7 +51,6 @@ export function AdminSectionsPage() {
       });
 
       notify(section.visible ? 'Скрыто' : 'Показано');
-
       await load();
     } catch {
       notify('Не удалось изменить', 'error');
@@ -65,9 +62,7 @@ export function AdminSectionsPage() {
     direction: 'up' | 'down',
   ) => {
     const swapIndex =
-      direction === 'up'
-        ? index - 1
-        : index + 1;
+      direction === 'up' ? index - 1 : index + 1;
 
     if (
       swapIndex < 0 ||
@@ -76,16 +71,16 @@ export function AdminSectionsPage() {
       return;
     }
 
-    const current = sections[index];
-    const target = sections[swapIndex];
+    const a = sections[index];
+    const b = sections[swapIndex];
 
     try {
-      await updatePageSection(current.id, {
-        sort_order: target.sort_order,
+      await updatePageSection(a.id, {
+        sort_order: b.sort_order,
       });
 
-      await updatePageSection(target.id, {
-        sort_order: current.sort_order,
+      await updatePageSection(b.id, {
+        sort_order: a.sort_order,
       });
 
       await load();
@@ -99,28 +94,15 @@ export function AdminSectionsPage() {
   ) => {
     try {
       await createPageSection({
-        section_key:
-          section.section_key +
-          '-copy-' +
-          Date.now(),
-
-        title:
-          section.title +
-          ' (копия)',
-
+        section_key: `${section.section_key}-copy-${Date.now()}`,
+        title: `${section.title} (копия)`,
         subtitle: section.subtitle,
-
-        sort_order:
-          section.sort_order + 1,
-
+        sort_order: section.sort_order + 1,
         visible: false,
-
-        content_json:
-          section.content_json,
+        content_json: section.content_json,
       });
 
       notify('Секция дублирована');
-
       await load();
     } catch {
       notify('Не удалось дублировать', 'error');
@@ -134,7 +116,6 @@ export function AdminSectionsPage() {
       await deletePageSection(deleteId);
 
       notify('Удалено');
-
       await load();
     } catch {
       notify('Не удалось удалить', 'error');
@@ -152,32 +133,26 @@ export function AdminSectionsPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <AdminPageHeader
         title="Секции сайта"
-        description="Порядок, видимость и управление блоками главной страницы."
+        description="Управление порядком и видимостью блоков сайта"
       />
 
       <div className="flex flex-col gap-2">
         {sections.map((section, index) => (
           <div
             key={section.id}
-            className={
-              'flex items-center gap-3 rounded-2xl p-4 ' +
-              'ring-1 ring-ink-200/60 ' +
-              (
-                section.visible
-                  ? 'bg-pearl-50'
-                  : 'bg-pearl-100/50 opacity-60'
-              )
-            }
+            className={`flex items-center gap-3 rounded-2xl p-4 ring-1 ring-ink-200/60 ${
+              section.visible
+                ? 'bg-pearl-50'
+                : 'bg-pearl-100/50 opacity-60'
+            }`}
           >
             <div className="flex flex-col gap-0.5">
               <button
                 type="button"
-                onClick={() =>
-                  move(index, 'up')
-                }
+                onClick={() => move(index, 'up')}
                 disabled={index === 0}
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-ink-900/5 disabled:opacity-30"
                 title="Переместить вверх"
@@ -187,9 +162,7 @@ export function AdminSectionsPage() {
 
               <button
                 type="button"
-                onClick={() =>
-                  move(index, 'down')
-                }
+                onClick={() => move(index, 'down')}
                 disabled={
                   index === sections.length - 1
                 }
@@ -207,15 +180,11 @@ export function AdminSectionsPage() {
                 </span>
 
                 <span
-                  className={
-                    'inline-flex rounded-full px-2 py-0.5 ' +
-                    'text-xs font-semibold ' +
-                    (
-                      section.visible
-                        ? 'bg-teal-500/15 text-teal-800'
-                        : 'bg-orange-500/10 text-orange-700'
-                    )
-                  }
+                  className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                    section.visible
+                      ? 'bg-teal-500/15 text-teal-800'
+                      : 'bg-orange-500/10 text-orange-700'
+                  }`}
                 >
                   {section.visible
                     ? 'Видим'
@@ -224,14 +193,14 @@ export function AdminSectionsPage() {
               </div>
 
               {section.subtitle && (
-                <div className="text-sm text-ink-500">
+                <span className="text-sm text-ink-500">
                   {section.subtitle}
-                </div>
+                </span>
               )}
 
-              <div className="mt-1 font-mono text-xs text-ink-400">
+              <span className="ml-2 font-mono text-xs text-ink-400">
                 {section.section_key}
-              </div>
+              </span>
             </div>
 
             <div className="flex items-center gap-1">
@@ -285,9 +254,7 @@ export function AdminSectionsPage() {
         title="Удалить блок?"
         message="Удалить эту секцию? Отменить действие будет невозможно."
         onConfirm={handleDelete}
-        onCancel={() =>
-          setDeleteId(null)
-        }
+        onCancel={() => setDeleteId(null)}
       />
     </div>
   );
