@@ -1,60 +1,21 @@
-import { useEffect, useState, useCallback } from 'react';
-import { fetchPageSections } from '@/lib/data';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  fetchPageSections,
+  updatePageSection,
+} from '@/lib/data';
 import type { PageSectionRow } from '@/types';
 
-export interface PageSectionWithLayout extends PageSectionRow {
-  layout?: {
-    width?: string;
-    maxWidth?: string;
-    minHeight?: string;
-    paddingTop?: number;
-    paddingBottom?: number;
-    marginTop?: number;
-    marginBottom?: number;
-    gap?: number;
-    align?: 'left' | 'center' | 'right';
-    columns?: number;
-  };
-}
-
 export function usePageSections() {
-  const [sections, setSections] = useState<PageSectionWithLayout[]>([]);
+  const [sections, setSections] = useState<PageSectionRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const loadSections = useCallback(async () => {
-    setLoading(true);
-
+  const load = useCallback(async () => {
     try {
       const data = await fetchPageSections();
-
-      const normalized = data.map((section) => {
-        let layout: PageSectionWithLayout['layout'] = undefined;
-
-        if (
-          section.content_json &&
-          typeof section.content_json === 'object' &&
-          !Array.isArray(section.content_json)
-        ) {
-          const content = section.content_json as Record<string, unknown>;
-
-          if (
-            content.layout &&
-            typeof content.layout === 'object' &&
-            !Array.isArray(content.layout)
-          ) {
-            layout = content.layout as PageSectionWithLayout['layout'];
-          }
-        }
-
-        return {
-          ...section,
-          layout,
-        };
-      });
-
-      setSections(normalized);
+      setSections(data);
     } catch {
-      setSections([]);
+      // Не ломаем сайт, если база временно недоступна.
     } finally {
       setLoading(false);
     }
@@ -67,38 +28,11 @@ export function usePageSections() {
       try {
         const data = await fetchPageSections();
 
-        if (!mounted) return;
-
-        const normalized = data.map((section) => {
-          let layout: PageSectionWithLayout['layout'] = undefined;
-
-          if (
-            section.content_json &&
-            typeof section.content_json === 'object' &&
-            !Array.isArray(section.content_json)
-          ) {
-            const content = section.content_json as Record<string, unknown>;
-
-            if (
-              content.layout &&
-              typeof content.layout === 'object' &&
-              !Array.isArray(content.layout)
-            ) {
-              layout = content.layout as PageSectionWithLayout['layout'];
-            }
-          }
-
-          return {
-            ...section,
-            layout,
-          };
-        });
-
-        setSections(normalized);
-      } catch {
         if (mounted) {
-          setSections([]);
+          setSections(data);
         }
+      } catch {
+        // ignore
       } finally {
         if (mounted) {
           setLoading(false);
@@ -111,9 +45,147 @@ export function usePageSections() {
     };
   }, []);
 
+  /**
+   * Изменение порядка секций.
+   */
+  const moveSection = useCallback(
+    async (sectionId: string, direction: 'up' | 'down') => {
+      const currentIndex = sections.findIndex(
+        (section) => section.id === sectionId,
+      );
+
+      if (currentIndex === -1) return;
+
+      const targetIndex =
+        direction === 'up'
+          ? currentIndex - 1
+          : currentIndex + 1;
+
+      if (
+        targetIndex < 0 ||
+        targetIndex >= sections.length
+      ) {
+        return;
+      }
+
+      const current = sections[currentIndex];
+      const target = sections[targetIndex];
+
+      setSaving(true);
+
+      try {
+        await updatePageSection(current.id, {
+          sort_order: target.sort_order,
+        });
+
+        await updatePageSection(target.id, {
+          sort_order: current.sort_order,
+        });
+
+        const updated = [...sections];
+
+        updated[currentIndex] = target;
+        updated[targetIndex] = current;
+
+        setSections(updated);
+      } finally {
+        setSaving(false);
+      }
+    },
+    [sections],
+  );
+
+  /**
+   * Перемещение секции в конкретную позицию.
+   * Это понадобится для drag & drop.
+   */
+  const moveSectionTo = useCallback(
+    async (sectionId: string, targetIndex: number) => {
+      const currentIndex = sections.findIndex(
+        (section) => section.id === sectionId,
+      );
+
+      if (currentIndex === -1) return;
+
+      if (
+        targetIndex < 0 ||
+        targetIndex >= sections.length
+      ) {
+        return;
+      }
+
+      if (currentIndex === targetIndex) return;
+
+      const reordered = [...sections];
+      const [movedSection] = reordered.splice(currentIndex, 1);
+
+      reordered.splice(targetIndex, 0, movedSection);
+
+      setSaving(true);
+
+      try {
+        /*
+         * Перезаписываем sort_order последовательными значениями.
+         * Так drag & drop не будет зависеть от старых значений.
+         */
+        for (let index = 0; index < reordered.length; index += 1) {
+          const section = reordered[index];
+
+          await updatePageSection(section.id, {
+            sort_order: index,
+          });
+        }
+
+        setSections(reordered);
+      } finally {
+        setSaving(false);
+      }
+    },
+    [sections],
+  );
+
+  /**
+   * Изменение видимости секции.
+   */
+  const toggleSection = useCallback(
+    async (sectionId: string) => {
+      const section = sections.find(
+        (item) => item.id === sectionId,
+      );
+
+      if (!section) return;
+
+      setSaving(true);
+
+      try {
+        await updatePageSection(section.id, {
+          visible: !section.visible,
+        });
+
+        setSections((current) =>
+          current.map((item) =>
+            item.id === sectionId
+              ? {
+                  ...item,
+                  visible: !item.visible,
+                }
+              : item,
+          ),
+        );
+      } finally {
+        setSaving(false);
+      }
+    },
+    [sections],
+  );
+
   return {
     sections,
     loading,
-    reload: loadSections,
+    saving,
+    reload: load,
+    moveSection,
+    moveSectionTo,
+    toggleSection,
   };
 }
