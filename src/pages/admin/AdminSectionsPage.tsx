@@ -16,7 +16,6 @@ import {
 } from '@/lib/data';
 import type { PageSectionRow } from '@/types';
 import { AdminPageHeader } from '@/components/admin/AdminLayout';
-import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/admin/Dialogs';
 import { useToast } from '@/components/admin/Toast';
 
@@ -163,9 +162,7 @@ export function AdminSectionsPage() {
               <button
                 type="button"
                 onClick={() => move(index, 'down')}
-                disabled={
-                  index === sections.length - 1
-                }
+                disabled={index === sections.length - 1}
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-ink-900/5 disabled:opacity-30"
                 title="Переместить вниз"
               >
@@ -186,35 +183,27 @@ export function AdminSectionsPage() {
                       : 'bg-orange-500/10 text-orange-700'
                   }`}
                 >
-                  {section.visible
-                    ? 'Видим'
-                    : 'Скрыт'}
+                  {section.visible ? 'Видим' : 'Скрыт'}
                 </span>
               </div>
 
               {section.subtitle && (
-                <span className="text-sm text-ink-500">
+                <div className="text-sm text-ink-500">
                   {section.subtitle}
-                </span>
+                </div>
               )}
 
-              <span className="ml-2 font-mono text-xs text-ink-400">
+              <div className="mt-1 font-mono text-xs text-ink-400">
                 {section.section_key}
-              </span>
+              </div>
             </div>
 
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() =>
-                  toggleVisible(section)
-                }
+                onClick={() => toggleVisible(section)}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-600 hover:bg-ink-900/5"
-                title={
-                  section.visible
-                    ? 'Скрыть'
-                    : 'Показать'
-                }
+                title={section.visible ? 'Скрыть' : 'Показать'}
               >
                 {section.visible ? (
                   <EyeOff className="h-4 w-4" />
@@ -225,9 +214,7 @@ export function AdminSectionsPage() {
 
               <button
                 type="button"
-                onClick={() =>
-                  duplicate(section)
-                }
+                onClick={() => duplicate(section)}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-600 hover:bg-ink-900/5"
                 title="Дублировать"
               >
@@ -236,9 +223,7 @@ export function AdminSectionsPage() {
 
               <button
                 type="button"
-                onClick={() =>
-                  setDeleteId(section.id)
-                }
+                onClick={() => setDeleteId(section.id)}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-orange-600 hover:bg-orange-500/10"
                 title="Удалить"
               >
