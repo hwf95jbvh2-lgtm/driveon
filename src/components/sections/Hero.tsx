@@ -1,124 +1,56 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Send } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Send, ArrowRight } from 'lucide-react';
 import { useSiteConfig } from '@/hooks/useSiteConfig';
 import { useContentValue } from '@/context/ContentContext';
-import { ButtonAnchor } from '@/components/ui/Button';
-import { fetchNavItems } from '@/lib/data';
-import type { NavItemRow } from '@/types';
+import { ButtonLink, ButtonAnchor } from '@/components/ui/Button';
+import { Dots, Rings, Squiggle, ArcShape } from '@/components/decorations/Decorations';
 
-export function Header() {
-  const [open, setOpen] = useState(false);
-  const location = useLocation();
+export function Hero() {
   const { telegramUrl } = useSiteConfig();
-  const [navLinks, setNavLinks] = useState<NavItemRow[]>([]);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const data = await fetchNavItems('header');
-        if (mounted) setNavLinks(data.filter((n) => n.visible));
-      } catch {
-        // ignore
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  const telegramButtonLabel = useContentValue('header.telegram_button', 'Открыть Telegram');
-
-  const renderNavLink = (link: NavItemRow, className: string) => {
-    if (link.url.startsWith('/')) {
-      return (
-        <NavLink
-          key={link.id}
-          to={link.url}
-          className={({ isActive }) =>
-            className.includes('rounded-full')
-              ? `${className} ${isActive ? 'bg-ink-900/8 text-ink-900' : 'text-ink-600 hover:text-ink-900 hover:bg-ink-900/5'}`
-              : `${className} ${isActive ? 'bg-ink-900/8 text-ink-900' : 'text-ink-700 hover:bg-ink-900/5'}`
-          }
-        >
-          {link.label}
-        </NavLink>
-      );
-    }
-    return (
-      <a
-        key={link.id}
-        href={link.url}
-        target={link.open_in_new_tab ? '_blank' : undefined}
-        rel={link.open_in_new_tab ? 'noopener noreferrer' : undefined}
-        className={className}
-      >
-        {link.label}
-      </a>
-    );
-  };
+  const badge = useContentValue('hero.badge', 'Независимый digital-сервис');
+  const title = useContentValue('hero.title', 'Всё, что нужно знать перед экзаменом в ГИБДД');
+  const subtitle = useContentValue('hero.subtitle', 'Даты экзаменов, информация от сдающих и полезные материалы в одном месте.');
+  const buttonPrimary = useContentValue('hero.button_primary', 'Экзамены');
+  const buttonSecondary = useContentValue('hero.button_secondary', 'Telegram');
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-200/60 bg-pearl-100/85 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link to="/" className="flex items-center gap-2.5" aria-label="DriveON — на главную">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500">
-            <span className="h-4 w-4 rounded-full border-2 border-pearl-100" />
+    <section className="relative overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 md:py-28">
+        <div className="relative max-w-3xl">
+          <span className="label mb-4 inline-block rounded-full bg-teal-500/15 px-3 py-1 text-teal-700">
+            {badge}
           </span>
-          <span className="font-display text-xl font-bold tracking-tight text-ink-900">
-            Drive<span className="text-orange-500">ON</span>
-          </span>
-        </Link>
+          <h1 className="h1">
+            {title}
+          </h1>
+          <p className="body-text mt-6 max-w-xl">
+            {subtitle}
+          </p>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) =>
-            renderNavLink(link, 'rounded-full px-4 py-2 text-sm font-medium transition-colors'),
-          )}
-        </nav>
-
-        <div className="hidden md:block">
-          <ButtonAnchor href={telegramUrl} size="sm">
-            <Send className="h-4 w-4" />
-            {telegramButtonLabel}
-          </ButtonAnchor>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <ButtonLink to="/exams" size="lg">
+              {buttonPrimary}
+              <ArrowRight className="h-5 w-5" />
+            </ButtonLink>
+            <ButtonAnchor href={telegramUrl} variant="outline" size="lg">
+              <Send className="h-5 w-5" />
+              {buttonSecondary}
+            </ButtonAnchor>
+          </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-xl text-ink-900 hover:bg-ink-900/5 md:hidden"
-          aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
-          aria-expanded={open}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Decorative abstract elements */}
+        <Rings className="absolute -right-4 top-10 text-teal-500/30 sm:right-8 sm:top-16" />
+        <Dots className="absolute right-24 top-44 hidden text-orange-500/40 sm:block" />
+        <Squiggle className="absolute -left-2 bottom-8 hidden text-teal-600/40 sm:block" />
+        <ArcShape className="absolute -right-10 bottom-0 hidden text-orange-500/30 lg:block" />
       </div>
 
-      {open && (
-        <div className="border-t border-ink-200/60 bg-pearl-100 md:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 sm:px-6">
-            {navLinks.map((link) =>
-              renderNavLink(link, 'rounded-xl px-4 py-3 text-base font-medium transition-colors'),
-            )}
-            <ButtonAnchor href={telegramUrl} size="md" className="mt-2 w-full">
-              <Send className="h-4 w-4" />
-              {telegramButtonLabel}
-            </ButtonAnchor>
-          </nav>
-        </div>
-      )}
-    </header>
+      {/* Bottom edge */}
+      <div className="h-px w-full bg-ink-200/60" />
+      <Link to="/about" className="sr-only">
+        О DriveON
+      </Link>
+    </section>
   );
 }
